@@ -5,9 +5,7 @@ using Homies.Models.Type;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Globalization;
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Xml.Linq;
 
@@ -191,6 +189,103 @@ namespace Homies.Controllers
             };
 
             await data.Events.AddAsync(eventToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Event");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var eventToEdit = await data.Events.FindAsync(id);
+
+            if (eventToEdit == null)
+            {
+                return BadRequest();
+            }
+
+            string currentUserId = GetUserId();
+
+            if (currentUserId != eventToEdit.OrganiserId)
+            {
+                return Unauthorized();
+            }
+
+            var  eventModel = new EventFormModel()
+            {
+                Name = eventToEdit.Name,
+                Description = eventToEdit.Description,
+                Start = eventToEdit.Start.ToString(DataConstants.DateFormat),
+                End = eventToEdit.End.ToString(DataConstants.DateFormat),
+                TypeId = eventToEdit.TypeId,
+                Types = await GetTypes()
+            };
+
+            return View(eventModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EventFormModel eventModel)
+        {
+            string currentUser = GetUserId();
+
+            var eventToEdit = await data.Events.FindAsync(id);
+
+            if (eventToEdit == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentUser != eventToEdit.OrganiserId)
+            {
+                return Unauthorized();
+            }
+
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(
+                eventModel.Start,
+                DataConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out start))
+            {
+                ModelState
+                    .AddModelError(nameof(eventModel.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+            }
+
+            if (!DateTime.TryParseExact(
+                eventModel.End,
+                DataConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState
+                    .AddModelError(nameof(eventModel.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+            }
+
+            var types = await GetTypes();
+
+            if (!types.Any(t => t.Id == eventModel.TypeId))
+            {
+                ModelState.AddModelError(nameof(eventModel.TypeId), "Type does not exist!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                eventModel.Types = types;
+
+                return View(eventModel);
+            }
+
+            eventToEdit.Name = eventModel.Name;
+            eventToEdit.Description = eventModel.Description;
+            eventToEdit.Start = start;
+            eventToEdit.End = end;
+            eventToEdit.TypeId = eventModel.TypeId;
+
             await data.SaveChangesAsync();
 
             return RedirectToAction("All", "Event");
