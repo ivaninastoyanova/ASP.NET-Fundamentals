@@ -291,6 +291,34 @@ namespace Homies.Controllers
             return RedirectToAction("All", "Event");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var eventToDisplay = await data
+               .Events
+               .Where(e => e.Id == id)
+               .Select(e => new EventDetailsViewModel()
+               {
+                   Id = e.Id,
+                   Name = e.Name,
+                   Start = e.Start.ToString(DataConstants.DateFormat),
+                   End = e.End.ToString(DataConstants.DateFormat),
+                   Organiser = e.Organiser.UserName,
+                   Type = e.Type.Name,
+                   Description = e.Description,
+                   CreatedOn = e.CreatedOn.ToString(DataConstants.DateFormat)
+               })
+               .FirstOrDefaultAsync();
+
+            if (eventToDisplay == null)
+            {
+                return BadRequest();
+            }
+
+            return View(eventToDisplay);
+        }
+
+
 
         private string GetUserId()
         {
