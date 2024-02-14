@@ -1,10 +1,13 @@
 ﻿using Homies.Data;
 using Homies.Data.Models;
 using Homies.Models.Event;
+using Homies.Models.Type;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Xml.Linq;
 
@@ -120,8 +123,98 @@ namespace Homies.Controllers
             return RedirectToAction("All", "Event");
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var eventModel = new EventFormModel();
+
+            var types = await GetTypes();
+
+            eventModel.Types = types;
+
+            return View(eventModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(EventFormModel eventModel)
+        {
+            string currentUserId = GetUserId();
+
+            var types = await GetTypes();
+
+            if (!types.Any(t => t.Id == eventModel.TypeId))
+            {
+                ModelState.AddModelError(nameof(eventModel.TypeId), "Type does not exist!");
+            }
+
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(
+               eventModel.Start,
+               DataConstants.DateFormat,
+               CultureInfo.InvariantCulture,
+               DateTimeStyles.None,
+               out start))
+            {
+                ModelState
+                    .AddModelError(nameof(eventModel.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+            }
+
+            if (!DateTime.TryParseExact(
+                eventModel.End,
+                DataConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState
+                    .AddModelError(nameof(eventModel.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                eventModel.Types = types;
+                return View(eventModel);
+            }
+
+            var eventToAdd = new Event()
+            {
+                Name = eventModel.Name,
+                Description = eventModel.Description,
+                CreatedOn = DateTime.Now,
+                TypeId = eventModel.TypeId,
+                OrganiserId = currentUserId,
+                Start = start,
+                End = end
+            };
+
+            await data.Events.AddAsync(eventToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Event");
+        }
+
+
         private string GetUserId()
-          => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        }
+
+        private async Task<IEnumerable<TypeViewModel>> GetTypes()
+        {
+            var types = await data
+                        .Types
+                         .Select(t => new TypeViewModel
+                         {
+                             Name = t.Name,
+                             Id = t.Id,
+                         })
+                         .ToListAsync();
+
+            return types;
+        }
 
     }
 }
