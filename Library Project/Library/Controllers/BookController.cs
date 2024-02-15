@@ -1,9 +1,11 @@
 ﻿using Library.Data;
 using Library.Data.Models;
 using Library.Models.Book;
+using Library.Models.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace Library.Controllers
@@ -124,9 +126,88 @@ namespace Library.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var bookModel = new BookFormViewModel();
+
+            var categories = await GetCategories();
+
+            bookModel.Categories = categories;
+
+            return View(bookModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Add(BookFormViewModel bookModel)
+        {
+            string currentUserId = GetUserId();
+
+            var categories = await GetCategories();
+
+            if (!categories.Any(c => c.Id == bookModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(bookModel.Id), "Category does not exist!");
+            }
+
+            //In case there is a problem with the decimal value - we can take it as string from the form
+            //Input value should be string in the form for creating a new book.
+            //In the database the value is decimal
+
+            //decimal rating;
+
+            //if (!decimal.TryParse(bookModel.Rating, out rating) || rating < 0 || rating > 10)
+            //{
+            //    ModelState.AddModelError(nameof(bookModel.Rating), "Rating must be a number between 0 and 10.");
+
+            //    bookModel.Categories = categories;
+
+            //    return View(bookModel);
+            //}
+
+
+            if (!ModelState.IsValid)
+            {
+                bookModel.Categories = categories;
+                return View(bookModel);
+            }
+
+
+            var bookToAdd = new Book()
+            {
+                Title = bookModel.Title,
+                Author = bookModel.Author,
+                Description = bookModel.Description,
+                ImageUrl = bookModel.Url,
+                Rating = bookModel.Rating,
+                CategoryId = bookModel.CategoryId,
+            };
+
+            await data.Books.AddAsync(bookToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Book");
+        }
+
+
         private string GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        }
+
+        private async Task<IEnumerable<CategoryViewModel>> GetCategories()
+        {
+            var categories = await data
+                        .Categories
+                         .Select(c => new CategoryViewModel
+                         {
+                             Name = c.Name,
+                             Id = c.Id,
+                         })
+                         .ToListAsync();
+
+            return categories;
         }
 
     }
