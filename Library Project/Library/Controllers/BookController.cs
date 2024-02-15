@@ -1,4 +1,5 @@
 ﻿using Library.Data;
+using Library.Data.Models;
 using Library.Models.Book;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,68 @@ namespace Library.Controllers
                 .ToListAsync();
 
             return View(mineBooks);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCollection(int id)
+        {
+            var currentBook = await data
+                .Books
+                .FindAsync(id);
+
+            if (currentBook == null)
+            {
+                return BadRequest();
+            }
+
+            string currentUserId = GetUserId();
+
+            var entryToAdd = new IdentityUserBook()
+            {
+                BookId = currentBook.Id,
+                CollectorId = currentUserId,
+            };
+
+            if (await data.IdentityUsersBooks.ContainsAsync(entryToAdd))
+            {
+                return RedirectToAction("All", "Book");
+            }
+
+            await data.IdentityUsersBooks.AddAsync(entryToAdd);
+
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Book");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCollection(int id)
+        {
+            var bookId = id;
+            var bookToRemove = await data
+                .Books
+                .FindAsync(bookId);
+
+            if (bookToRemove == null)
+            {
+                return BadRequest();
+            }
+
+            string currentUserId = GetUserId();
+
+            var entryToRemove = await data.IdentityUsersBooks
+                .FirstOrDefaultAsync(ub => ub.CollectorId == currentUserId && ub.BookId == bookId);
+
+            if (entryToRemove == null)
+            {
+                return BadRequest();
+            }
+
+            data.IdentityUsersBooks.Remove(entryToRemove);
+
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("Mine", "Book");
         }
 
 
