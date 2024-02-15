@@ -69,7 +69,7 @@ namespace Library.Areas.Identity.Pages.Account
 
             if (User != null && User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("All", "Event");
+                return RedirectToAction("All", "Book");
             }
 
             if (!string.IsNullOrEmpty(ErrorMessage))
