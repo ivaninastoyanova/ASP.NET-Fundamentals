@@ -150,7 +150,7 @@ namespace SoftUniBazar.Controllers
 
             if (!categories.Any(c => c.Id == adModel.CategoryId))
             {
-                ModelState.AddModelError(nameof(adModel.CategoryId), "Type does not exist!");
+                ModelState.AddModelError(nameof(adModel.CategoryId), "Category does not exist!");
             }
 
             DateTime createdOn = DateTime.Now;
@@ -170,10 +170,82 @@ namespace SoftUniBazar.Controllers
                 Price = adModel.Price,
                 CategoryId = adModel.CategoryId,
                 OwnerId = currentUserId,
-
             };
 
             await data.Ads.AddAsync(adToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Ad");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var adToEdit = await data.Ads.FindAsync(id);
+
+            if (adToEdit == null)
+            {
+                return BadRequest();
+            }
+
+            string currentUserId = GetUserId();
+
+            if (currentUserId != adToEdit.OwnerId)
+            {
+                return Unauthorized();
+            }
+
+            var adModel = new AdFormViewModel()
+            {
+                Name = adToEdit.Name,
+                Description = adToEdit.Description,
+                ImageUrl = adToEdit.ImageUrl,
+                Price = adToEdit.Price,
+                CategoryId = adToEdit.CategoryId,
+                Categories = await GetCategories()
+            };
+
+            return View(adModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, AdFormViewModel adModel)
+        {
+            string currentUser = GetUserId();
+
+            var adToEdit = await data.Ads.FindAsync(id);
+
+            if (adToEdit == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentUser != adToEdit.OwnerId)
+            {
+                return Unauthorized();
+            }
+
+
+            var categories = await GetCategories();
+
+            if (!categories.Any(c => c.Id == adModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(adModel.CategoryId), "Category does not exist!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                adModel.Categories = categories;
+
+                return View(adModel);
+            }
+
+            adToEdit.Name = adModel.Name;
+            adToEdit.Description = adModel.Description;
+            adToEdit.ImageUrl = adModel.ImageUrl;
+            adToEdit.Price = adModel.Price;
+            adToEdit.CategoryId = adModel.CategoryId;
+
             await data.SaveChangesAsync();
 
             return RedirectToAction("All", "Ad");

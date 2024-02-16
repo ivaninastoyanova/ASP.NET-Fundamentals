@@ -8,12 +8,12 @@ namespace SoftUniBazar.Models.Ad
     {
         [Required]
         [StringLength(AdNameMaxLength, MinimumLength = AdNameMinLength,
-           ErrorMessage = "Event {0} must be between {2} and {1} characters.")]
+           ErrorMessage = "Ad {0} must be between {2} and {1} characters.")]
         public string Name { get; set; } = string.Empty;
 
         [Required]
         [StringLength(AdDescriptionMaxLength, MinimumLength = AdDescriptionMinLength,
-            ErrorMessage = "Event {0} must be between {2} and {1} characters.")]
+            ErrorMessage = "Ad {0} must be between {2} and {1} characters.")]
         public string Description { get; set; } = string.Empty;
 
         [Required]
