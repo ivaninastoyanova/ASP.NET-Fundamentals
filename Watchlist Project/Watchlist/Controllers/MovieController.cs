@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Security.Claims;
 using System.Xml.Linq;
 using Watchlist.Models.Movie;
+using Watchlist.Models.Genre;
 
 namespace Watchlist.Controllers
 {
@@ -91,7 +92,6 @@ namespace Watchlist.Controllers
             await data.SaveChangesAsync();
 
             return RedirectToAction("All", "Movie");
-        //https://localhost:7290/Movie/AddToCollection?movieId=2
         }
 
         [HttpPost]
@@ -124,9 +124,70 @@ namespace Watchlist.Controllers
             return RedirectToAction("Watched", "Movie");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var movieModel = new AddMovieViewModel();
+
+            var genres = await GetGenres();
+
+            movieModel.Genres = genres;
+
+            return View(movieModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AddMovieViewModel movieModel)
+        {
+            string currentUserId = GetUserId();
+
+            var genres = await GetGenres();
+
+            if (!genres.Any(t => t.Id == movieModel.GenreId))
+            {
+                ModelState.AddModelError(nameof(movieModel.GenreId), "Genre does not exist!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                movieModel.Genres = genres;
+                return View(movieModel);
+            }
+
+            var movieToAdd = new Movie()
+            {
+               Title = movieModel.Title,
+               Director = movieModel.Director,
+               ImageUrl = movieModel.ImageUrl,
+               GenreId = movieModel.GenreId,
+               Rating = movieModel.Rating,
+            };
+
+            await data.Movies.AddAsync(movieToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Movie");
+        }
+
+
         private string GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        }
+
+        private async Task<IEnumerable<GenreViewModel>> GetGenres()
+        {
+            var genres = await data
+                        .Genres
+                         .Select(t => new GenreViewModel
+                         {
+                             Name = t.Name,
+                             Id = t.Id,
+                         })
+                         .ToListAsync();
+
+            return genres;
         }
     }
 }
