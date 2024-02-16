@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\C# FUNDAMENTALS\\watchlist exam prep 17 Oct 2022\\Watchlist_Skeleton_6.0\\Watchlist\\Watchlist.csproj": {}
+    "C:\\Users\\Ivanina Soyanova\\Documents\\GitHub\\ASP.NET-Fundamentals\\Watchlist Project\\Watchlist\\Watchlist.csproj": {}
   },
   "projects": {
-    "D:\\C# FUNDAMENTALS\\watchlist exam prep 17 Oct 2022\\Watchlist_Skeleton_6.0\\Watchlist\\Watchlist.csproj": {
+    "C:\\Users\\Ivanina Soyanova\\Documents\\GitHub\\ASP.NET-Fundamentals\\Watchlist Project\\Watchlist\\Watchlist.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C# FUNDAMENTALS\\watchlist exam prep 17 Oct 2022\\Watchlist_Skeleton_6.0\\Watchlist\\Watchlist.csproj",
+        "projectUniqueName": "C:\\Users\\Ivanina Soyanova\\Documents\\GitHub\\ASP.NET-Fundamentals\\Watchlist Project\\Watchlist\\Watchlist.csproj",
         "projectName": "Watchlist",
-        "projectPath": "D:\\C# FUNDAMENTALS\\watchlist exam prep 17 Oct 2022\\Watchlist_Skeleton_6.0\\Watchlist\\Watchlist.csproj",
+        "projectPath": "C:\\Users\\Ivanina Soyanova\\Documents\\GitHub\\ASP.NET-Fundamentals\\Watchlist Project\\Watchlist\\Watchlist.csproj",
         "packagesPath": "C:\\Users\\Ivanina Soyanova\\.nuget\\packages\\",
-        "outputPath": "D:\\C# FUNDAMENTALS\\watchlist exam prep 17 Oct 2022\\Watchlist_Skeleton_6.0\\Watchlist\\obj\\",
+        "outputPath": "C:\\Users\\Ivanina Soyanova\\Documents\\GitHub\\ASP.NET-Fundamentals\\Watchlist Project\\Watchlist\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -52,25 +52,25 @@
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.27, )"
             },
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.27, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.27, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.27, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.16, )"
             }
           },
           "imports": [
