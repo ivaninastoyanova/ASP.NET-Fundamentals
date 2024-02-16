@@ -4,6 +4,11 @@ using static SoftUniBazar.Data.DataConstants;
 
 namespace SoftUniBazar.Models.Ad
 {
+    /// <summary>
+    /// Add form view model which is used when: 
+    /// 1. adding a new ad
+    /// 2. editing an already existing ad
+    /// </summary>
     public class AdFormViewModel
     {
         [Required]

@@ -5,6 +5,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SoftUniBazar.Models.Ad
 {
+    /// <summary>
+    /// Add all view model which is used when displaying the ads on pages: 
+    /// 1. all ads
+    /// 2. cart/my ads
+    /// </summary>
     public class AllAdViewModel
     {
         public int Id { get; set; }
