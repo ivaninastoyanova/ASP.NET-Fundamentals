@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using SoftUniBazar.Data;
 using SoftUniBazar.Data.Models;
 using SoftUniBazar.Models.Ad;
+using SoftUniBazar.Models.Category;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace SoftUniBazar.Controllers
@@ -126,11 +128,75 @@ namespace SoftUniBazar.Controllers
             return RedirectToAction("All", "Ad");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var adModel = new AdFormViewModel();
+
+            var categories = await GetCategories();
+
+            adModel.Categories = categories;
+
+            return View(adModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AdFormViewModel adModel)
+        {
+            string currentUserId = GetUserId();
+
+            var categories = await GetCategories();
+
+            if (!categories.Any(c => c.Id == adModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(adModel.CategoryId), "Type does not exist!");
+            }
+
+            DateTime createdOn = DateTime.Now;
+
+            if (!ModelState.IsValid)
+            {
+                adModel.Categories = categories;
+                return View(adModel);
+            }
+
+            var adToAdd = new Ad()
+            {
+                Name = adModel.Name,
+                Description = adModel.Description,
+                CreatedOn = createdOn,
+                ImageUrl = adModel.ImageUrl,
+                Price = adModel.Price,
+                CategoryId = adModel.CategoryId,
+                OwnerId = currentUserId,
+
+            };
+
+            await data.Ads.AddAsync(adToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Ad");
+        }
+
 
         private string GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
         }
 
+        private async Task<IEnumerable<CategoryViewModel>> GetCategories()
+        {
+            var categories = await data
+                        .Categories
+                         .Select(t => new CategoryViewModel
+                         {
+                             Name = t.Name,
+                             Id = t.Id,
+                         })
+                         .ToListAsync();
+
+            return categories;
+        }
     }
 }
