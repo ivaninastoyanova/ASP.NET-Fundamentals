@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,6 +9,7 @@ namespace Watchlist.Data.Models
     {
 
         [Required]
+        [Comment("User identifier")]
         public string UserId { get; set; } = string.Empty;
 
         [Required]
@@ -15,6 +17,7 @@ namespace Watchlist.Data.Models
         public IdentityUser User { get; set; } = null!;
 
         [Required]
+        [Comment("Movie identifier")]
         public int MovieId { get; set; }
 
         [Required]

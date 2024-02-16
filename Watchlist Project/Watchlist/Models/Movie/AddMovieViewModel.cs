@@ -4,6 +4,9 @@ using static Watchlist.Data.DataConstants;
 
 namespace Watchlist.Models.Movie
 {
+    /// <summary>
+    /// Form model for adding new movies to the app
+    /// </summary>
     public class AddMovieViewModel
     {
         [Required]

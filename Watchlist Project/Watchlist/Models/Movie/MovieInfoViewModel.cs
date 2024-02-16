@@ -1,5 +1,10 @@
 ﻿namespace Watchlist.Models.Movie
 {
+    /// <summary>
+    /// Movie view model that is used in the following pages:
+    /// All movies
+    /// Watched movies
+    /// </summary>
     public class MovieInfoViewModel
     {
         public int Id { get; set; }
