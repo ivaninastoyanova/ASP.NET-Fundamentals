@@ -44,20 +44,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contacts/Add.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcQWRkLmNzaHRtbA==
+[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contact/Add.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxBZGQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contacts/All.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcQWxsLmNzaHRtbA==
+[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contact/All.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxBbGwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contacts/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcRWRpdC5jc2h0bWw=
+[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contact/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contacts/Team.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdHNcVGVhbS5jc2h0bWw=
+[C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Contact/Team.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxUZWFtLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Ivanina Soyanova/Documents/GitHub/ASP.NET-Fundamentals/Teams Project/Contacts/Views/Home/Index.cshtml]
