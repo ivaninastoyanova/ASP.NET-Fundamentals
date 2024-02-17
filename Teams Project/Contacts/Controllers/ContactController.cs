@@ -55,7 +55,7 @@ namespace Contacts.Controllers
                     Email = uc.Contact.Email,
                     PhoneNumber = uc.Contact.PhoneNumber,
                     Address = uc.Contact.Address,
-                    Website = uc.Contact.Email
+                    Website = uc.Contact.Website
                 })
                 .ToListAsync();
 
@@ -136,10 +136,7 @@ namespace Contacts.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Add(AddContactViewModel contactModel)
-        {
-            string currentUserId = GetUserId();
-
-            
+        {   
             if (!ModelState.IsValid)
             {
                 return View(contactModel);
@@ -156,6 +153,57 @@ namespace Contacts.Controllers
             };
 
             await data.Contacts.AddAsync(contactToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Contact");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var contactToEdit = await data.Contacts.FindAsync(id);
+
+            if (contactToEdit == null)
+            {
+                return BadRequest();
+            }
+
+            var contactModel = new AddContactViewModel()
+            {
+                FirstName = contactToEdit.FirstName,
+                LastName = contactToEdit.LastName,
+                Email = contactToEdit.Email,
+                PhoneNumber = contactToEdit.PhoneNumber,
+                Address = contactToEdit.Address,
+                Website= contactToEdit.Website
+            };
+
+            return View(contactModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, AddContactViewModel contactModel)
+        {
+            var contactToEdit = await data.Contacts.FindAsync(id);
+
+            if (contactToEdit == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(contactModel);
+            }
+
+            contactToEdit.FirstName = contactModel.FirstName;
+            contactToEdit.LastName = contactModel.LastName;
+            contactToEdit.Email = contactModel.Email;
+            contactToEdit.PhoneNumber = contactModel.PhoneNumber;
+            contactToEdit.Address = contactModel.Address;
+            contactToEdit.Website = contactModel.Website;
+
             await data.SaveChangesAsync();
 
             return RedirectToAction("All", "Contact");
