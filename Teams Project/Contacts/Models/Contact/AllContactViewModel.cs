@@ -3,9 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Contacts.Models.Contact
 {
+    /// <summary>
+    /// Contact view model that is used in the following pages:
+    /// All contacts
+    /// My contacts
+    /// </summary>
     public class AllContactViewModel
-    {
-       
+    {  
         public int Id { get; set; }
 
         public string FirstName { get; set; } = string.Empty;

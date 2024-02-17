@@ -4,6 +4,11 @@ using static Contacts.Data.DataConstants;
 
 namespace Contacts.Models.Contact
 {
+    /// <summary>
+    /// Form model for: 
+    /// Adding new contacts to the app
+    /// Editing already existing contacts
+    /// </summary>
     public class AddContactViewModel
     {
         [Required]
