@@ -12,13 +12,13 @@
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">first name</th>
-                <th scope="col">last name</th>
-                <th scope="col">e-mail</th>
-                <th scope="col">phone number</th>
-                <th scope="col">address</th>
-                <th scope="col">website</th>
-                <th scope="col">action</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Address</th>
+                <th scope="col">Website</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -34,12 +34,12 @@
                     <td>@contact.Website</td>
                     <td>
                         <span style="float:left">
-                            <form class="input-group-sm" asp-controller="contact" asp-action="AddToTeam" asp-route-id="@contact.Id">
+                            <form class="input-group-sm" asp-controller="Contact" asp-action="AddToTeam" asp-route-id="@contact.Id">
                                 <input type="submit" value="Add to team" class="fs-6 btn btn-success mb-3 p-2" />
                             </form>
                         </span>
                         <span style="float:right">
-                            <a asp-controller="contact" asp-action="Edit" asp-route-id="@contact.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Contact" asp-action="Edit" asp-route-id="@contact.Id" class="btn btn-primary">Edit</a>
                         </span>
                     </td>
                 </tr>
