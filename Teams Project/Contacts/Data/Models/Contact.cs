@@ -35,7 +35,6 @@ namespace Contacts.Data.Models
         [RegularExpression(ContactWebsiteRegex)]
         public string Website { get; set; } = string.Empty;
 
-
         public IList<ApplicationUserContact> ApplicationUsersContacts { get; set; } = new List<ApplicationUserContact>();
 
     }

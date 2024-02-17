@@ -4,6 +4,7 @@ using Contacts.Models.Contact;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace Contacts.Controllers
@@ -123,6 +124,41 @@ namespace Contacts.Controllers
             await data.SaveChangesAsync();
 
             return RedirectToAction("Team", "Contact");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var contactModel = new AddContactViewModel();
+
+            return View(contactModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AddContactViewModel contactModel)
+        {
+            string currentUserId = GetUserId();
+
+            
+            if (!ModelState.IsValid)
+            {
+                return View(contactModel);
+            }
+
+            var contactToAdd = new Contact()
+            {
+               FirstName = contactModel.FirstName,
+               LastName = contactModel.LastName,    
+               Email = contactModel.Email,
+               PhoneNumber = contactModel.PhoneNumber,
+               Address = contactModel.Address,
+               Website = contactModel.Website
+            };
+
+            await data.Contacts.AddAsync(contactToAdd);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction("All", "Contact");
         }
 
 
